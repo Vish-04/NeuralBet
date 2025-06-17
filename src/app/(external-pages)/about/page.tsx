@@ -116,14 +116,9 @@ export default function AboutPage() {
             <CardContent className="max-w-3xl mx-auto text-center">
               <div className="mb-10">
                 <div className="w-28 h-28 mx-auto rounded-full bg-primary/10 flex items-center justify-center p-1 ring-2 ring-primary/20">
-                  <Image
-                    src="/images/larry.jpg"
-                    alt="Creator"
-                    width={100}
-                    height={100}
-                    className="rounded-full"
-                    unoptimized
-                  />
+                  <div className="w-24 h-24 rounded-full bg-primary/20 flex items-center justify-center">
+                    <span className="text-2xl font-bold text-primary">AT</span>
+                  </div>
                 </div>
               </div>
               <p className="text-lg text-card-foreground/90 leading-relaxed">
