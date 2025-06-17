@@ -17,7 +17,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   signInWithMagicLinkAction,
   signUpAction,
+  signInWithProviderAction,
 } from '@/data/auth/auth';
+import { RenderProviders } from '@/components/Auth/RenderProviders';
+import {
+  HoverCard,
+  HoverCardTrigger,
+  HoverCardContent,
+} from '@/components/ui/hover-card';
+import { Info } from 'lucide-react';
 import { createClient } from '@/supabase-clients/client';
 import { useAction } from 'next-safe-action/hooks';
 import { useRouter } from 'next/navigation';
@@ -84,6 +92,32 @@ export function SignUp({
       onError: ({ error }) => {
         const errorMessage = error.serverError ?? 'Failed to create account';
         toast.error(errorMessage, { id: toastRef.current });
+        toastRef.current = undefined;
+      },
+    }
+  );
+
+  const { execute: executeProvider, status: providerStatus } = useAction(
+    signInWithProviderAction,
+    {
+      onExecute: () => {
+        toastRef.current = toast.loading('Redirecting to provider...');
+      },
+      onSuccess: (result) => {
+        toast.dismiss(toastRef.current);
+        toastRef.current = undefined;
+        if (result.data?.url) {
+          window.location.href = result.data.url;
+        }
+      },
+      onError: (error) => {
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : `Provider sign in failed ${String(error)}`;
+        toast.error(errorMessage, {
+          id: toastRef.current,
+        });
         toastRef.current = undefined;
       },
     }
@@ -203,7 +237,7 @@ function FullSignUpScreen({
               Sign up with your social account
               <HoverCard openDelay={200}>
                 <HoverCardTrigger asChild>
-                  <InfoIcon className="h-3 w-3 cursor-help" />
+                  <Info className="h-3 w-3 cursor-help" />
                 </HoverCardTrigger>
                 <HoverCardContent className="w-80" side="top" align="center">
                   <div className="space-y-2">
