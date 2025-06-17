@@ -1,0 +1,209 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  font-family: 'Inter', sans-serif; /* Updated font */
+}
+
+[data-nextjs-scroll-focus-boundary] {
+  height: 100%;
+  width: 100%;
+}
+
+.dotted-bg {
+  background-image: radial-gradient(
+    circle,
+    var(--dot-color) 1px,
+    transparent 1px
+  );
+  background-size: 24px 24px;
+}
+
+@layer base {
+  :root {
+    /* Base Colors */
+    --background: 240 20% 95%; /* Light neutral */
+    --foreground: 220 15% 20%; /* Darker for better contrast */
+    
+    /* Neutral Colors */
+    --neutral-light: 240 10% 95%;
+    --neutral-dark: 220 10% 20%;
+    
+    /* Card and Popover */
+    --card: 240 10% 95%;
+    --card-foreground: var(--foreground);
+    
+    --popover: var(--card);
+    --popover-foreground: var(--foreground);
+    
+    /* Primary Colors */
+    --primary: 217 91% 60%; /* Blue 500 */
+    --primary-foreground: 220 100% 95%;
+    
+    /* Secondary Colors */
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    
+    /* Accent Colors */
+    --accent: 270 91% 65%; /* Purple 500 */
+    --accent-foreground: var(--primary-foreground);
+    
+    /* Success, Warning, Destructive */
+    --success: 140 90% 35%; /* Slightly desaturated Bright Green */
+    --success-foreground: 140 100% 95%;
+    
+    --warning: 40 90% 45%; /* Slightly desaturated Vivid Orange */
+    --warning-foreground: 40 100% 95%;
+    
+    --destructive: 0 90% 45%; /* Slightly desaturated Bright Red */
+    --destructive-foreground: 220 100% 95%;
+    
+    /* Neutral Colors */
+    --border: var(--neutral-light);
+    --input: var(--neutral-light);
+    --ring: var(--primary);
+    
+    --radius: 0.5rem;
+    
+    /* Chart Colors */
+    --chart-1: 200 100% 50%; /* Bright Blue */
+    --chart-2: 30 100% 55%; /* Vibrant Orange */
+    --chart-3: 340 100% 45%; /* Hot Pink */
+    --chart-4: 120 100% 40%; /* Bright Green */
+    --chart-5: 60 100% 50%; /* Neon Yellow */
+  }
+  
+  .dark {
+    /* Base Colors */
+    --background: 220 15% 20%; /* Darker neutral for dark theme */
+    --foreground: 220 100% 95%;
+    
+    /* Neutral Colors */
+    --neutral-light: 220 15% 25%;
+    --neutral-dark: 220 15% 80%;
+    
+    /* Card and Popover */
+    --card: var(--background);
+    --card-foreground: var(--foreground);
+    
+    --popover: var(--card);
+    --popover-foreground: var(--foreground);
+    
+    /* Primary Colors */
+    --primary: 224 76% 48%; /* Blue 700 */
+    --primary-foreground: var(--foreground);
+    
+    /* Secondary Colors */
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    
+    /* Accent Colors */
+    --accent: 272 72% 47%; /* Purple 700 */
+    --accent-foreground: var(--foreground);
+    
+    /* Success, Warning, Destructive */
+    --success: 140 90% 40%; /* Adjusted for dark theme */
+    --success-foreground: var(--foreground);
+    
+    --warning: 40 90% 50%; /* Adjusted for dark theme */
+    --warning-foreground: var(--foreground);
+    
+    --destructive: 0 90% 50%; /* Adjusted for dark theme */
+    --destructive-foreground: var(--foreground);
+    
+    /* Neutral Colors */
+    --border: var(--neutral-light);
+    --input: var(--neutral-light);
+    --ring: var(--primary);
+    
+    /* Chart Colors */
+    --chart-1: 200 100% 55%;
+    --chart-2: 30 100% 60%;
+    --chart-3: 340 100% 50%;
+    --chart-4: 120 100% 45%;
+    --chart-5: 60 100% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings:
+      'rlig' 1,
+      'calt' 1;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .gradient-primary {
+    background: linear-gradient(90deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
+  }
+  
+  .glow {
+    box-shadow: 0 0 8px hsl(var(--primary)), 0 0 16px hsl(var(--primary) / 20%);
+  }
+
+  /* Button Styles */
+  .button {
+    @apply bg-primary text-primary-foreground py-2 px-4 rounded;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .button:hover {
+    background-color: hsl(var(--primary) / 80%);
+    transform: translateY(-2px);
+  }
+
+  .gradient-line-diff {
+    background: linear-gradient(90deg, hsl(var(--primary)) 10%, hsl(var(--secondary)/ 70%) 120%);
+    color: hsl(var(--primary-foreground));
+  }
+}
+
+@layer components {
+  .heading-1 {
+    @apply scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl leading-tight;
+  }
+  
+  .heading-2 {
+    @apply scroll-m-20 text-3xl font-semibold tracking-tight first:mt-0;
+  }
+  
+  .heading-3 {
+    @apply scroll-m-20 text-2xl font-semibold tracking-tight;
+  }
+  
+  .heading-4 {
+    @apply scroll-m-20 text-xl font-semibold tracking-tight;
+  }
+  
+  .paragraph {
+    @apply leading-7 [&:not(:first-child)]:mt-6;
+  }
+}
+
+.hide-dialog-close > .absolute.right-4.top-4 {
+  display: none;
+}
+
+:root {
+   
+  body[data-scroll-locked][data-scroll-locked] {
+    overflow: auto !important;
+  }
+  body[data-scroll-locked] {
+    margin-right: 0 !important;
+  }
+}

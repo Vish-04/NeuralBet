@@ -1,0 +1,11 @@
+{
+  "tasks": {
+    "serve": "deno run --allow-net index.ts"
+  },
+  "compilerOptions": {
+    "lib": ["deno.window"]
+  },
+  "imports": {
+    "zod": "npm:zod@3"
+  }
+}
