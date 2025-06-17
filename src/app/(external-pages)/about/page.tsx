@@ -52,7 +52,8 @@ export default function AboutPage() {
               <Logo textSize="4xl" />
             </h1>
             <p className="mt-4 text-xl md:text-2xl text-muted-foreground/90 max-w-3xl mx-auto">
-              A modern, production-ready starter template for building full-stack applications
+              A modern, production-ready starter template for building
+              full-stack applications
             </p>
           </div>
         </div>
@@ -69,9 +70,12 @@ export default function AboutPage() {
             </CardHeader>
             <CardContent className="max-w-3xl mx-auto text-center">
               <p className="text-lg text-card-foreground/90 leading-relaxed">
-                This template provides a solid foundation for building modern web applications with Next.js and Supabase. 
-                It includes authentication, database integration, UI components, and everything you need to start 
-                developing your application immediately. Skip the boilerplate and focus on building your unique features.
+                This template provides a solid foundation for building modern
+                web applications with Next.js and Supabase. It includes
+                authentication, database integration, UI components, and
+                everything you need to start developing your application
+                immediately. Skip the boilerplate and focus on building your
+                unique features.
               </p>
             </CardContent>
           </Card>
@@ -122,9 +126,11 @@ export default function AboutPage() {
                 </div>
               </div>
               <p className="text-lg text-card-foreground/90 leading-relaxed">
-                This template was created by Andrew Ting, combining experience in modern web development
-                with a passion for creating efficient, scalable, and user-friendly applications. This template
-                represents best practices and a carefully selected technology stack for rapid development.
+                This template was created by Andrew Ting, combining experience
+                in modern web development with a passion for creating efficient,
+                scalable, and user-friendly applications. This template
+                represents best practices and a carefully selected technology
+                stack for rapid development.
               </p>
             </CardContent>
           </Card>
@@ -133,9 +139,7 @@ export default function AboutPage() {
         {/* Connect Section */}
         <div className="py-24 text-center">
           <div className="max-w-2xl mx-auto">
-            <h2 className="text-3xl font-bold text-primary mb-12">
-              Resources
-            </h2>
+            <h2 className="text-3xl font-bold text-primary mb-12">Resources</h2>
             <div className="flex flex-wrap justify-center gap-6">
               <Button asChild size="lg" className="group">
                 <Link
@@ -169,7 +173,7 @@ export default function AboutPage() {
 export const metadata = {
   title: "About | Andrew Ting's Next.js + Supabase Template",
   description:
-    "Learn about this Next.js + Supabase template created by Andrew Ting for building modern web applications.",
+    'Learn about this Next.js + Supabase template created by Andrew Ting for building modern web applications.',
   icons: {
     icon: [
       {

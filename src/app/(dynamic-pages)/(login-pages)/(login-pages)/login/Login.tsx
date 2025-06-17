@@ -136,7 +136,6 @@ export function Login({
     }
   );
 
-
   return (
     <div
       data-success={emailSentSuccessMessage}

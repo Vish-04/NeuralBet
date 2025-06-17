@@ -29,8 +29,7 @@ const tiny5 = Tiny5({
 
 export const metadata = {
   title: `Andrew Ting's Next.js + Supabase Template`,
-  description:
-    'your description here',
+  description: 'your description here',
   icons: {
     icon: [
       {

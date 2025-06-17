@@ -3,8 +3,7 @@ export const dynamic = 'force-dynamic';
 
 export const metadata = {
   title: `Andrew Ting's Next.js + Supabase Template`,
-  description:
-    'your description here',
+  description: 'your description here',
   icons: {
     icon: [
       {

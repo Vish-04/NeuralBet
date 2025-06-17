@@ -24,8 +24,8 @@ export default function PrivacyPolicyPage() {
               1. Information We Collect
             </h2>
             <p>
-              In this template application, we collect information necessary to provide
-              our services:
+              In this template application, we collect information necessary to
+              provide our services:
             </p>
             <ul className="list-disc pl-6 mb-6">
               <li>Account information (name, email)</li>
@@ -58,9 +58,7 @@ export default function PrivacyPolicyPage() {
               <li>
                 Direct user input when creating accounts or using features
               </li>
-              <li>
-                Automated collection of usage analytics
-              </li>
+              <li>Automated collection of usage analytics</li>
               <li>Analytics and tracking tools to improve user experience</li>
               <li>Supabase authentication and database services</li>
             </ul>
@@ -108,8 +106,8 @@ export default function PrivacyPolicyPage() {
             </h2>
             <p>
               We retain your data for as long as your account is active or as
-              needed to provide services. Usage data and analytics
-              may be retained in anonymized form for application improvement.
+              needed to provide services. Usage data and analytics may be
+              retained in anonymized form for application improvement.
             </p>
 
             <h2 className="text-2xl font-semibold mt-8 mb-4">
@@ -137,7 +135,7 @@ export default function PrivacyPolicyPage() {
 export const metadata = {
   title: "Privacy Policy | Andrew Ting's Next.js + Supabase Template",
   description:
-    "Template privacy policy for your Next.js + Supabase application.",
+    'Template privacy policy for your Next.js + Supabase application.',
   icons: {
     icon: [
       {

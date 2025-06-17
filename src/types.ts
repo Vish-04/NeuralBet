@@ -22,3 +22,24 @@ export type AuthProvider =
   | 'twitch'
   | 'twitter'
   | 'workos';
+
+// Game Engine Types
+export type GamePlayer = 'a' | 'b';
+export type GameWinner = GamePlayer | 'draw';
+
+/**
+ * Generic game move result
+ */
+export interface GameMoveResult<S> {
+  state: S;
+  winner?: GameWinner;
+}
+
+/**
+ * Base interface for all game states
+ */
+export interface GameState {
+  currentTurn: GamePlayer;
+  isComplete: boolean;
+  winner?: GameWinner;
+}

@@ -123,7 +123,6 @@ export function SignUp({
     }
   );
 
-
   return (
     <div
       data-success={successMessage}

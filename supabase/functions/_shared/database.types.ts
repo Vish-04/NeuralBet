@@ -9,6 +9,74 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      bets: {
+        Row: {
+          bettor: string
+          created_at: string
+          id: string
+          match_id: string
+          odds: number
+          payout: number | null
+          settled: boolean
+          side: string
+          stake: number
+        }
+        Insert: {
+          bettor: string
+          created_at?: string
+          id?: string
+          match_id: string
+          odds: number
+          payout?: number | null
+          settled?: boolean
+          side: string
+          stake: number
+        }
+        Update: {
+          bettor?: string
+          created_at?: string
+          id?: string
+          match_id?: string
+          odds?: number
+          payout?: number | null
+          settled?: boolean
+          side?: string
+          stake?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bets_match_id_fkey"
+            columns: ["match_id"]
+            isOneToOne: false
+            referencedRelation: "matches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      games: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          slug: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          slug: string
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          slug?: string
+          status?: string
+        }
+        Relationships: []
+      }
       items: {
         Row: {
           created_at: string
@@ -30,12 +98,189 @@ export type Database = {
         }
         Relationships: []
       }
+      matches: {
+        Row: {
+          created_at: string
+          finished_at: string | null
+          game_id: string
+          game_state: Json | null
+          id: string
+          llm_a: string
+          llm_b: string
+          odds_a: number | null
+          odds_b: number | null
+          simulated: boolean
+          starts_at: string
+          winner: string | null
+        }
+        Insert: {
+          created_at?: string
+          finished_at?: string | null
+          game_id: string
+          game_state?: Json | null
+          id?: string
+          llm_a: string
+          llm_b: string
+          odds_a?: number | null
+          odds_b?: number | null
+          simulated?: boolean
+          starts_at: string
+          winner?: string | null
+        }
+        Update: {
+          created_at?: string
+          finished_at?: string | null
+          game_id?: string
+          game_state?: Json | null
+          id?: string
+          llm_a?: string
+          llm_b?: string
+          odds_a?: number | null
+          odds_b?: number | null
+          simulated?: boolean
+          starts_at?: string
+          winner?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "matches_game_id_fkey"
+            columns: ["game_id"]
+            isOneToOne: false
+            referencedRelation: "games"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          display_name: string
+          id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name: string
+          id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string
+          id?: string
+        }
+        Relationships: []
+      }
+      wallets: {
+        Row: {
+          credits: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          credits?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          credits?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
-      [_ in never]: never
+      v_wallet_balance: {
+        Row: {
+          betting_balance: number | null
+          current_balance: number | null
+          initial_credits: number | null
+          last_bet_at: string | null
+          user_id: string | null
+          wallet_updated_at: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
-      [_ in never]: never
+      calculate_bet_payout: {
+        Args: { p_stake: number; p_odds: number; p_won: boolean }
+        Returns: number
+      }
+      fn_place_bet: {
+        Args: { p_match_id: string; p_side: string; p_stake: number }
+        Returns: {
+          bettor: string
+          created_at: string
+          id: string
+          match_id: string
+          odds: number
+          payout: number | null
+          settled: boolean
+          side: string
+          stake: number
+        }
+      }
+      fn_settle_match: {
+        Args: { p_match_id: string }
+        Returns: {
+          bets_settled: number
+          total_payout: number
+          winner_side: string
+        }[]
+      }
+      get_or_create_wallet: {
+        Args: { p_user_id: string }
+        Returns: {
+          credits: number
+          updated_at: string
+          user_id: string
+        }
+      }
+      get_user_balance: {
+        Args: { p_user_id?: string }
+        Returns: number
+      }
+      get_user_betting_stats: {
+        Args: { p_user_id: string }
+        Returns: {
+          total_bets: number
+          total_wagered: number
+          total_payout: number
+          settled_bets: number
+          unsettled_bets: number
+          net_profit: number
+        }[]
+      }
+      get_user_wallet_details: {
+        Args: { p_user_id?: string }
+        Returns: {
+          user_id: string
+          initial_credits: number
+          betting_balance: number
+          current_balance: number
+          wallet_updated_at: string
+          last_bet_at: string
+        }[]
+      }
+      refresh_wallet_balance_view: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      settle_match_bets: {
+        Args: { p_match_id: string; p_winner: string }
+        Returns: number
+      }
+      update_wallet_credits: {
+        Args: { p_user_id: string; p_credit_change: number }
+        Returns: {
+          credits: number
+          updated_at: string
+          user_id: string
+        }
+      }
     }
     Enums: {
       [_ in never]: never

@@ -6,7 +6,11 @@ export interface GameEngine<S, M> {
   /** initial immutable board */
   initialState: S;
   /** apply player move, return new state & optional winner */
-  reducer: (state: S, move: M, by: 'a' | 'b') => { state: S; winner?: 'a'|'b'|'draw' };
+  reducer: (
+    state: S,
+    move: M,
+    by: 'a' | 'b'
+  ) => { state: S; winner?: 'a' | 'b' | 'draw' };
   /** pretty‑print for logs */
   toString: (state: S) => string;
 }
