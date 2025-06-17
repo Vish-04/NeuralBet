@@ -4,7 +4,6 @@ import { Email } from '@/components/Auth/Email';
 import { EmailAndPassword } from '@/components/Auth/EmailAndPassword';
 import { EmailConfirmationPendingCard } from '@/components/Auth/EmailConfirmationPendingCard';
 import { RedirectingPleaseWaitCard } from '@/components/Auth/RedirectingPleaseWaitCard';
-import { RenderProviders } from '@/components/Auth/RenderProviders';
 import { Logo } from '@/components/Logo';
 import {
   Card,
@@ -13,27 +12,20 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from '@/components/ui/hover-card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import {
   signInWithMagicLinkAction,
-  signInWithProviderAction,
   signUpAction,
 } from '@/data/auth/auth';
 import { createClient } from '@/supabase-clients/client';
-import { InfoIcon } from 'lucide-react';
 import { useAction } from 'next-safe-action/hooks';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 import { toast } from 'sonner';
 
-// Feature flag
-const SOCIAL_LOGIN_ONLY = true;
+// Feature flag - set to magic link only
+const MAGIC_LINK_ONLY = true;
 
 export function SignUp({
   next,
@@ -97,26 +89,6 @@ export function SignUp({
     }
   );
 
-  const { execute: executeProvider, status: providerStatus } = useAction(
-    signInWithProviderAction,
-    {
-      onExecute: () => {
-        toastRef.current = toast.loading('Creating account...');
-      },
-      onSuccess: ({ data }) => {
-        toast.success('Redirecting...', { id: toastRef.current });
-        toastRef.current = undefined;
-        if (data?.url) {
-          window.location.href = data.url;
-        }
-      },
-      onError: ({ error }) => {
-        const errorMessage = error.serverError ?? 'Failed to create account';
-        toast.error(errorMessage, { id: toastRef.current });
-        toastRef.current = undefined;
-      },
-    }
-  );
 
   return (
     <div
@@ -135,10 +107,10 @@ export function SignUp({
           message="Please wait while we redirect you to your dashboard."
           heading="Redirecting to Dashboard"
         />
-      ) : SOCIAL_LOGIN_ONLY ? (
-        <SocialSignUpOnly
-          providerStatus={providerStatus}
-          executeProvider={executeProvider}
+      ) : MAGIC_LINK_ONLY ? (
+        <MagicLinkSignUp
+          magicLinkStatus={magicLinkStatus}
+          executeMagicLink={executeMagicLink}
           next={next}
         />
       ) : (
@@ -261,16 +233,13 @@ function FullSignUpScreen({
   );
 }
 
-function SocialSignUpOnly({
-  providerStatus,
-  executeProvider,
+function MagicLinkSignUp({
+  magicLinkStatus,
+  executeMagicLink,
   next,
 }: {
-  providerStatus: string;
-  executeProvider: (data: {
-    provider: 'google' | 'github' | 'twitter';
-    next?: string;
-  }) => void;
+  magicLinkStatus: string;
+  executeMagicLink: (data: { email: string; next?: string }) => void;
   next?: string;
 }) {
   return (
@@ -279,31 +248,15 @@ function SocialSignUpOnly({
         <CardTitle>
           <Logo className="ml-1" textSize="3xl" />
         </CardTitle>
-        <CardDescription className="flex items-center justify-center gap-2">
-          Sign up with your social account
-          <HoverCard openDelay={100}>
-            <HoverCardTrigger asChild>
-              <InfoIcon className="h-3 w-3 cursor-help" />
-            </HoverCardTrigger>
-            <HoverCardContent className="w-80" side="top" align="center">
-              <div className="space-y-2">
-                <p className="text-sm text-muted-foreground">
-                  We currently support Google and Whop login. To access Premium
-                  Content, log in with the Whop account associated with your
-                  subscription.
-                </p>
-              </div>
-            </HoverCardContent>
-          </HoverCard>
+        <CardDescription>
+          Create an account with magic link we will send to your email
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-2 p-0">
-        <RenderProviders
-          providers={['google']}
-          isLoading={providerStatus === 'executing'}
-          onProviderLoginRequested={(
-            provider: 'google' | 'github' | 'twitter'
-          ) => executeProvider({ provider, next })}
+        <Email
+          onSubmit={(email) => executeMagicLink({ email, next })}
+          isLoading={magicLinkStatus === 'executing'}
+          view="sign-up"
         />
       </CardContent>
     </Card>

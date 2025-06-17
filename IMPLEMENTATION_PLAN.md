@@ -1,7 +1,24 @@
 ## Technical Implementation Document
 
 *MVP: “AI Battle Arena”*
-**Stack**: Next.js 14 (App Router, React Server Components) • Tailwind v3 • Supabase (PostgreSQL + Auth v2 + Realtime + Edge Functions) • TypeScript • Vercel
+**Stack**: Next.js 15 (App Router, React Server Components) • Tailwind v3.4 • Supabase (PostgreSQL + Auth v2 + Realtime + Edge Functions) • TypeScript • Vercel
+
+**Current Status**: Repository is bootstrapped with complete authentication system, modern UI components, and development tooling. Ready for business logic implementation.
+
+## Implementation Progress Summary
+
+| Section | Status | Priority | Notes |
+|---------|--------|----------|--------|
+| 1. Repo Bootstrap & Tooling | ✅ Complete | - | Next.js 15, TypeScript, Auth system ready |
+| 2. Supabase Auth & Env | ✅ Complete | - | Full auth flow implemented |
+| 3. Database Schema | 🔄 Next | High | Replace placeholder with game tables |
+| 4. Credit Purchase & Wallet | 📋 Pending | High | Stripe + wallet logic needed |
+| 5. Betting Engine & Odds | 📋 Pending | High | Core business logic |
+| 6. Game Abstraction Layer | 📋 Pending | Medium | Game engine framework |
+| 7. Game Implementations | 📋 Pending | Medium | Connect4, Treasure Hunt, Battleship |
+| 8. Public Pages | 🔄 Partial | Medium | Landing page done, need game pages |
+| 9. API Layer | 📋 Pending | High | Betting and match APIs |
+| 10. Realtime & Presence | 📋 Pending | Medium | Supabase realtime integration |
 
 ---
 
@@ -19,56 +36,51 @@ Each numbered section below is an **independent work package**. Give it to one L
 
 ---
 
-## 1  Repo Bootstrap & Tooling *(SR)*
+## 1  Repo Bootstrap & Tooling *(SR)* ✅ COMPLETED
 
-**Tasks**
+**Current State**: Repository is fully bootstrapped with modern tooling
 
-1. `pnpm create next-app ai‑battle‑arena --typescript --tailwind --app`
-2. Configure **monorepo** style: root + `/packages/common` (shared types/utils).
-3. Add **ESLint** (`next/core-web-vitals + tailwindcss`) & **Prettier**.
-4. Configure **CI**: GitHub Actions → `pnpm i && pnpm lint && pnpm test && pnpm build`.
-5. Install core deps:
-   `@supabase/supabase-js@2, zod, zustand, @tanstack/react-query, jotai`.
+* ✅ Next.js 15 with TypeScript, TailwindCSS, and App Router
+* ✅ Comprehensive ESLint + Prettier + TypeScript configuration
+* ✅ Husky pre-commit hooks with lint-staged and commitlint
+* ✅ Testing setup: Vitest (unit) + Playwright (E2E)
+* ✅ Core dependencies installed: @supabase/supabase-js@2.46.1, @tanstack/react-query@4.36.1, zod@3.23.8
+* ✅ Package manager: Yarn (preferred over pnpm)
+* ✅ Semantic release with automatic changelog
 
-**Acceptance Checklist**
-
-* `pnpm dev` renders default page.
-* `pnpm lint` & `test` exit 0.
-* `README.md` contains dev, test, deploy commands.
-
-**Out of Scope**: business logic, UI styling.
+**Note**: Uses Yarn instead of pnpm as package manager. Repository structure is single-app instead of monorepo.
 
 ---
 
-## 2  Supabase Project, Auth & Env *(SR)*
+## 2  Supabase Project, Auth & Env *(SR)* ✅ COMPLETED
 
-**Tasks**
+**Current State**: Complete authentication system implemented
 
-1. Create Supabase project **`ai_battle_arena`**.
-2. In Vercel & local `.env.local` add:
+* ✅ Supabase clients configured in `src/supabase-clients/`
+* ✅ Environment template `.env.local.example` provided
+* ✅ Complete auth flow: login, signup, forgot password, update password
+* ✅ OAuth support configured (GitHub, Google ready)
+* ✅ RLS policies implemented
+* ✅ Auth pages: `/login`, `/sign-up`, `/forgot-password`, `/update-password`
+* ✅ Protected routes with middleware
+* ✅ Auto-generated TypeScript types for database schema
 
-   ```
-   NEXT_PUBLIC_SUPABASE_URL=
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=
-   SUPABASE_SERVICE_ROLE_KEY=
-   ```
-3. Enable **Email + OAuth (GitHub, Google)**.
-4. Configure **RLS** (default deny).
-
-**Acceptance Checklist**
-
-* `packages/common/supaClient.ts` exports browser & server clients.
-* Demo page `/debug/auth` shows sign‑in/out and prints `session.user.id`.
-
-**Out of Scope**: credit logic.
+**Ready for**: Business-specific table schema and credit logic implementation.
 
 ---
 
-## 3  Database Schema *(SR)*
+## 3  Database Schema *(SR)* 🔄 NEXT PRIORITY
 
-> Write SQL migration files in `/supabase/migrations`.
+**Current State**: Basic `items` table exists as placeholder
 
-### 3.1  Core Tables
+**Required Migration**: Replace placeholder schema with AI Battle Arena tables
+
+**Commands Available**:
+* `yarn db:migration` - Create new migration
+* `yarn prod:db:push` - Push schema to Supabase  
+* `yarn generate:types:local` - Generate TypeScript types
+
+### 3.1  Core Tables to Implement
 
 | Table      | Columns                                                                                                                                                                            | Notes                 |
 | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
@@ -91,7 +103,9 @@ Each numbered section below is an **independent work package**. Give it to one L
 
 **Acceptance Checklist**
 
-* `pnpm supabase db reset` followed by `supabase db diff` → no drift.
+* `yarn local:db:reset` followed by `supabase db diff` → no drift.
+* `yarn generate:types:local` updates `src/lib/database.types.ts`
+* All tables have proper RLS policies
 
 **Out of Scope**: Edge function code.
 
@@ -304,39 +318,71 @@ All handlers in `/src/app/api/**/route.ts` with `zod` validation.
 
 ---
 
-### File / Folder Reference
+### Current File / Folder Structure
 
 ```
-apps/web/
-  src/
-    app/
-      api/
-        bets/route.ts
-        matches/[id]/run/route.ts
-        stripe/webhook/route.ts
-        ...
-      lobby/page.tsx
-      match/[id]/page.tsx
-    components/
-      Connect4Board.tsx
-      BetSlip.tsx
-    hooks/
-      useRealtimeMatch.ts
-packages/
-  games/
-    connect4.ts
-    treasure.ts
-    battleship.ts
-  common/
-    gameEngine.ts
-    supaClient.ts
+src/
+  app/
+    (dynamic-pages)/
+      (main-pages)/
+        dashboard/page.tsx          # Protected route (placeholder)
+        results/page.tsx            # Protected route (placeholder)
+        faq/page.tsx                # ✅ Complete
+        page.tsx                    # ✅ Landing page complete
+      (login-pages)/
+        login/page.tsx              # ✅ Complete auth flow
+        sign-up/page.tsx
+        forgot-password/page.tsx
+        update-password/page.tsx
+    (external-pages)/
+      about/page.tsx                # ✅ Static pages complete
+      privacy/page.tsx
+      terms/page.tsx
+    api/                            # 🔄 API routes needed:
+      # bets/route.ts               # Needed for betting
+      # matches/[id]/run/route.ts   # Needed for match execution
+      # stripe/webhook/route.ts     # Needed for payments
+  Components/
+    ui/                             # ✅ Complete Radix UI library
+    Auth/                           # ✅ Auth components complete
+    # Connect4Board.tsx            # 🔄 Game components needed
+    # BetSlip.tsx                  # 🔄 Betting components needed
+  lib/
+    database.types.ts               # ✅ Auto-generated Supabase types
+    utils.ts                        # ✅ Utility functions
+  supabase-clients/                 # ✅ Supabase client configs
 supabase/
-  migrations/
-  functions/
-    simulate_odds/index.ts
+  migrations/                       # 🔄 Need AI Battle Arena schema
+  # functions/                     # 🔄 Edge functions needed
+  #   simulate_odds/index.ts
 ```
+
+**Legend**: ✅ Complete | 🔄 In Progress/Needed | # Commented = Not Yet Created
 
 ---
+
+## Quick Commands Reference
+
+**This project uses Yarn, not pnpm. Always use `yarn` commands.**
+
+```bash
+# Development
+yarn dev                    # Start dev server with Turbopack
+yarn build                  # Production build
+yarn test                   # Run unit tests
+yarn test:e2e              # Run E2E tests
+yarn lint                   # Lint and format code
+
+# Database
+yarn db:migration          # Create new migration
+yarn prod:db:push          # Push schema to Supabase
+yarn generate:types:local  # Generate TypeScript types
+yarn local:db:reset        # Reset local database
+
+# Supabase
+yarn dev:functions         # Serve functions locally
+yarn prod:deploy          # Deploy functions to production
+```
 
 ## How to Use This Document
 
@@ -344,5 +390,7 @@ supabase/
 2. Copy **Tasks** & **Acceptance Checklist** into the PR description.
 3. After CI passes & human review, merge.
 4. Continue until Sections 1‑10 are merged ⇒ MVP ready to deploy.
+
+**Next Priority**: Section 3 (Database Schema) - Replace placeholder `items` table with AI Battle Arena schema.
 
 
